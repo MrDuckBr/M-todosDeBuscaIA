@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>Document</title>
+</head>
+
+
+
+
+<body>
+    <div id="table" width="600" heigth="600">
+        <table id="tableStyle">
+             <tr>
+                 <td>
+                    <div class="square" id="1" draggable="true" ondragstart="dragStart(event);">
+                        <p id="1">1</p>
+                    </div>
+                </td>
+                <td>
+                    <div class="square" id="2" draggable="true" ondragstart="dragStart(event);">
+                        <p id="2">2</p>
+                    </div>
+                </td>
+                <td>
+                    <div class="square" id="3" draggable="true" ondragstart="dragStart(event);">
+                        <p id="3">3</p>
+                    </div>
+                </td>
+                <td>
+                    <div class="square" id="4" draggable="true" ondragstart="dragStart(event);">
+                        <p id="4">4</p>
+                    </div>
+                </td>
+                <td>
+                    <div class="square" id="5" draggable="true" ondragstart="dragStart(event);">
+                        <p id="5">5</p>
+                    </div>
+                </td>
+                <td>
+                    <div class="square" id="6" draggable="true" ondragstart="dragStart(event);">
+                        <p id="6">6</p>
+                    </div>
+                </td>
+                <td>
+                    <div class="square" id="7" draggable="true" ondragstart="dragStart(event);">
+                        <p id="7">7</p>
+                    </div>
+                </td>
+                <td>
+                    <div class="square" id="8" draggable="true" ondragstart="dragStart(event);">
+                        <p id="8">8</p>
+                    </div>
+                </td>
+                
+            </tr>
+        </table>
+
+       
+    </div>
+
+    <div>
+        <table id="emptyTable">
+            <tr>
+                <td> <div id="dropBox" location="1" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                <td> <div id="dropBox" location="2" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                <td> <div id="dropBox" location="3"ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+            </tr>
+            <tr>
+                <td> <div id="dropBox" location="4" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                <td> <div id="dropBox" location="5" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                <td> <div id="dropBox" location="6" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+            </tr>
+            <tr>
+                <td> <div id="dropBox" location="7" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                <td> <div id="dropBox" location="8" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                <td> <div id="dropBox" location="9" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div>
+        <button onclick="Table();">Cega</button>
+        <button>Heuristica</button>
+    </div>
+
+
+</body>
+<script>
+    function dragStart(e) {
+        // Sets the operation allowed for a drag source
+        e.dataTransfer.effectAllowed = "move";
+    
+        // Sets the value and type of the dragged data
+        e.dataTransfer.setData("Text", e.target.getAttribute("id"));
+    }
+    function dragOver(e) {
+        // Prevent the browser default handling of the data
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    function drop(e) {
+        // Cancel this event for everyone else
+        e.stopPropagation();
+        e.preventDefault();
+    
+        // Retrieve the dragged data by type
+        var data = e.dataTransfer.getData("Text");
+        
+    
+        // Append image to the drop box
+        e.target.appendChild(document.getElementById(data));
+    }
+   </script>
+
+<script src="index.js"></script>
+
+</html>
