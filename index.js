@@ -1,9 +1,10 @@
 class Peca{
-    constructor(location, row,column, peso){
+    constructor(location, row,column, peso, visited = false){
         this.location = location // posicao atual
         this.row= row //
         this.column = column // 
         this.peso = peso // valor da peça
+        this.visited = visited
         this.parents = {
             up:null,
             down:null,
@@ -126,7 +127,7 @@ function pieceParents(peca){
 
 
 function verifyFields(){ //Função que verifica se os campos estão preenchidos corretamente
-
+    
 }
 
 //Estado final da máquina no forca bruta
@@ -154,30 +155,65 @@ function finalState(){
 
 
 
-function agentVerificator(){}
+function agentVerificator(){// Verificar as possiveis posicoes ao qual o mesmo pode andar
 
-
-
-function agentValidator(){}
-
-
-function agentRunner(){
-    
 }
 
-function changePieces(piece1, piece2){
+
+
+function agentValidator(){ // Se tal movimento não foi feito anteriormente.
+
+}
+
+
+function agentRunner(){   // Efetivamente vai se movimentar.
+}
+
+function changePieces(piece1, piece2){ // Falta testar
+    var aux = new Peca(null,null,null,null)
+    aux.parents = piece1.parents
+    piece1.parents = piece2.parents
+    piece2.parents = aux.parents
+    
     if(piece1.parents[up] == piece2.peso){// peca 1 em baixo
+        piece1.parents[down] = piece2.peso
+        piece2.parents[up] = piece1.peso
+
 
     }else if(piece1.parents[down] == piece2.peso){ // peca 1 em cima
+        piece1.parents[up] = piece2.peso
+        piece2.parents[down] = piece1.peso
 
-    }else if(piece1.parents[left] == piece2.peso){
-        
+
+    }else if(piece1.parents[left] == piece2.peso){ // peca 1 na esquerda
+        piece1.parents[left] = piece2.peso
+        piece2.parents[rigth] = piece1.peso
+
+    }else{ // peca 1 esta na direita
+        piece1.parents[rigth] = piece2.peso
+        piece2.parents[left] = piece1.peso
+
     }
 }
 
+function visitedPieces(vetAuxiliar){ //erado
+    for (let i = 0; i < vetAuxiliar.length; i++) {
+        if(vetAuxiliar.visited == false){
+            cont++
+        }
+        
+    }
 
-//pegar as peças organizadas no html
-//calcular resposta/
-//voltar para a pagina principal
+    if(cont == vetAuxiliar.)
+}
 
-// teste de commit
+
+function hardSearch(){
+    let vetAuxPieces = vetPieces
+
+    while(!finalState() and ){
+        //agent Verificator, verificar as
+    }
+
+
+}
