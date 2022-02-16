@@ -154,6 +154,28 @@ function finalState(){
 
 
 
+function agentVerificator(){}
+
+
+
+function agentValidator(){}
+
+
+function agentRunner(){
+    
+}
+
+function changePieces(piece1, piece2){
+    if(piece1.parents[up] == piece2.peso){// peca 1 em baixo
+
+    }else if(piece1.parents[down] == piece2.peso){ // peca 1 em cima
+
+    }else if(piece1.parents[left] == piece2.peso){
+        
+    }
+}
+
+
 //pegar as peças organizadas no html
 //calcular resposta/
 //voltar para a pagina principal
