@@ -180,3 +180,4 @@ function changePieces(piece1, piece2){
 //calcular resposta/
 //voltar para a pagina principal
 
+// teste de commit
