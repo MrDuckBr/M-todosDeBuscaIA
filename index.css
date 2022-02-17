@@ -9,6 +9,21 @@
   color: white;
 }
 
+.squareResult {
+  font-size: 90px;
+  /* text-align: center; */
+  text-align: center;
+  height: 100px;
+  width: 100px;
+  background-color: rgb(23, 23, 243);
+  margin-top: -90px;
+  color: white;
+}
+
+
+
+
+
 #emptyTable {
   border: 1px solid black;
   width: 100px;

@@ -20,11 +20,14 @@ class Peca{
 }
 
 var vetPieces
+let blankLocation
 
 function insertValues(){
     
     var table = document.getElementById("emptyTable");
     let valorTeste = document.querySelectorAll("[location]");
+   
+    
 
 
     
@@ -39,6 +42,8 @@ function insertValues(){
                 if(valorTeste[cont+k+j].innerText.length == 0 ) {
                     console.log(valorTeste[cont + k + j].innerText)
                     vetPieces[j][k] = new Peca(locationaux,j,k,0)
+                    blankLocation = [j,k]
+                   
                 }else{
                     console.log(valorTeste[cont + k + j].innerText)
                     vetPieces[j][k]= new Peca(locationaux,j,k, valorTeste[cont + k + j].innerText)
@@ -73,33 +78,57 @@ function createMatrix(){
     return vet;
 }
 
+function ordemAleatoria() {
+    const squares = [...document.getElementsByClassName("square")];
+    let valorTeste = [...document.querySelectorAll("[location]")];
+    shuffle(squares);
+   // console.log(squares)
+    shuffle(valorTeste);
+    for (let index = 0; index < 8; index++) {
+        valorTeste[index].append(squares[index]);
+    }
+}
 
+function shuffle(array) {
+    let randomNumber;
+    let tmp;
+    for (let i = array.length; i; ) {
+        randomNumber = (Math.random() * i--) | 0;
+        tmp = array[randomNumber];
+        // troca o número aleatório pelo atual
+        array[randomNumber] = array[i];
+        // troca o atual pelo aleatório
+        array[i] = tmp;
+    }
+}
 
 function Table(){
     
     vetPieces = createMatrix()
     console.log('passei aqui')
+    //ordemAleatoria();
     insertValues()
     console.log('passei aqui2')
-   
+
+    //pieceParents()
     
+        //agentVerificator()
+        console.log(finalState())
+        //changePieces(vetPieces[0][0],vetPieces[1][0])
+        render()
+}
 
-    for (var i = 0; i < 3; i++) {
-    for (var j = 0; j < 3; j++){
-     pieceParents(vetPieces[i][j])
-    }
-    }
-
+// Método que percorre a matrix e atribui os vizinhos
+function pieceParents(){ // Implementado
     for (var i = 0; i < 3; i++) {
         for (var j = 0; j < 3; j++){
-         console.log(vetPieces[i][j])
+         pieceParentsAux(vetPieces[i][j])
         }
         }
 }
 
-
-
-function pieceParents(peca){
+//Método aux que atribui as peças proximas
+function pieceParentsAux(peca){ //Implementado
     
     if(peca.row != 0 && peca.row <= 2){ // Nao pode se movimentar para cima
         peca.parents['up'] = vetPieces[peca.row - 1][peca.column].peso
@@ -131,14 +160,14 @@ function verifyFields(){ //Função que verifica se os campos estão preenchidos
 }
 
 //Estado final da máquina no forca bruta
-function finalState(){
+function finalState(){ // Implementado, falta testar
     let finalStateVector = [1,2,3,8,0,4,7,6,5]
     let count = 0
     let countFinalState = 0
 
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-            if(vetPieces[i][j] == finalStateVector[count]){
+            if(vetPieces[i][j].peso == finalStateVector[count]){
                 countFinalState++
             }
             count++
@@ -154,9 +183,24 @@ function finalState(){
 }
 
 
+// Verificar as possiveis posicoes ao qual o mesmo pode andar
+function agentVerificator(){// Implementado, falta testar
+    let parents = vetPieces[blankLocation[0]][blankLocation[1]].parents
+    let aux =  Object.keys(parents).map(function(key) {
+       
+        return parents[key];
+        
+    })
+    
+    let vetParents = aux.filter(obj =>{
+        if(obj != null){
+            return obj
+        }
+    })
 
-function agentVerificator(){// Verificar as possiveis posicoes ao qual o mesmo pode andar
+    return vetParents
 
+    
 }
 
 
@@ -165,35 +209,21 @@ function agentValidator(){ // Se tal movimento não foi feito anteriormente.
 
 }
 
-
-function agentRunner(){   // Efetivamente vai se movimentar.
+// Efetivamente vai se movimentar as peças
+function agentRunner(){   //Necessita Implementar
 }
 
-function changePieces(piece1, piece2){ // Falta testar
-    var aux = new Peca(null,null,null,null)
-    aux.parents = piece1.parents
-    piece1.parents = piece2.parents
-    piece2.parents = aux.parents
+//Realiza a troca na matrix entre duas peças
+function changePieces(piece1, piece2){ // Implementado, Falta testar
+
+    let auxiliarPiece = piece1
+    piece1.row = piece2.row
+    piece1.column = piece2.column
     
-    if(piece1.parents[up] == piece2.peso){// peca 1 em baixo
-        piece1.parents[down] = piece2.peso
-        piece2.parents[up] = piece1.peso
-
-
-    }else if(piece1.parents[down] == piece2.peso){ // peca 1 em cima
-        piece1.parents[up] = piece2.peso
-        piece2.parents[down] = piece1.peso
-
-
-    }else if(piece1.parents[left] == piece2.peso){ // peca 1 na esquerda
-        piece1.parents[left] = piece2.peso
-        piece2.parents[rigth] = piece1.peso
-
-    }else{ // peca 1 esta na direita
-        piece1.parents[rigth] = piece2.peso
-        piece2.parents[left] = piece1.peso
-
-    }
+    piece2.row = auxiliarPiece.row
+    piece2.column = auxiliarPiece.column
+    
+   pieceParents()
 }
 
 function visitedPieces(vetAuxiliar){ //erado
@@ -204,16 +234,49 @@ function visitedPieces(vetAuxiliar){ //erado
         
     }
 
-    if(cont == vetAuxiliar.)
+    //if(cont == vetAuxiliar.)
 }
 
+// Método de Busca em profundidade
+function hardSearch(){ //Implementando
+    let matrixAuxPieces = vetPieces
+    let vetMovementMatrix
+    while(!finalState()){
+        var vetParents = agentVerificator()
 
-function hardSearch(){
-    let vetAuxPieces = vetPieces
+        
+        //Ver possibilidade de movimentação
+        //
+        //armazenar movimento
+        //
 
-    while(!finalState() and ){
-        //agent Verificator, verificar as
     }
-
-
 }
+
+
+
+
+function render(){
+
+
+    let valorTeste = [...document.querySelectorAll("[locationResult]")];
+    
+   // console.log(squares)
+    shuffle(valorTeste);
+    let cont = 0
+        for (var i = 0; i < 3; i++) {
+            for (var j = 0; j < 3; j++){
+                let squareResult = document.createElement("div")
+                squareResult.setAttribute("class",'squareResult')
+                squareResult.setAttribute("id",i+j+cont)
+                squareResult.innerHTML= `<p id=${vetPieces[i][j].peso} > ${vetPieces[i][j].peso} </p>`
+            
+                console.log(squareResult)
+                console.log(valorTeste.indexOf)
+                valorTeste[i+j+cont].append(squareResult);
+                
+                }
+            cont+=2
+        }
+}
+

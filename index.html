@@ -64,21 +64,22 @@
 
     <div>
         <table id="emptyTable">
-            <tr>
-                <td> <div id="dropBox" location="1" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
-                <td> <div id="dropBox" location="2" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
-                <td> <div id="dropBox" location="3"ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
-            </tr>
-            <tr>
-                <td> <div id="dropBox" location="4" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
-                <td> <div id="dropBox" location="5" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
-                <td> <div id="dropBox" location="6" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
-            </tr>
-            <tr>
-                <td> <div id="dropBox" location="7" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
-                <td> <div id="dropBox" location="8" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
-                <td> <div id="dropBox" location="9" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
-            </tr>
+           
+                    <tr>
+                        <td> <div id="dropBox" location="1" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                        <td> <div id="dropBox" location="2" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                        <td> <div id="dropBox" location="3"ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                    </tr>
+                    <tr>
+                        <td> <div id="dropBox" location="4" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                        <td> <div id="dropBox" location="5" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                        <td> <div id="dropBox" location="6" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                    </tr>
+                    <tr>
+                        <td> <div id="dropBox" location="7" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                        <td> <div id="dropBox" location="8" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                        <td> <div id="dropBox" location="9" ondragover="dragOver(event);" ondrop="drop(event);"></div></td>
+                    </tr>
         </table>
     </div>
 
@@ -86,8 +87,29 @@
     <div>
         <button onclick="Table();">Cega</button>
         <button>Heuristica</button>
+        <button onclick="ordemAleatoria();">Aleatorio</button>
     </div>
 
+    <div id="result">
+        <table id="resultTable">
+           
+            <tr>
+                <td> <div id="dropBox" LocationResult="1"> </div></td>
+                <td> <div id="dropBox" LocationResult="2" ></div></td>
+                <td> <div id="dropBox" LocationResult="3"></div></td>
+            </tr>
+            <tr>
+                <td> <div id="dropBox" LocationResult="4" ></div></td>
+                <td> <div id="dropBox" LocationResult="5" ></div></td>
+                <td> <div id="dropBox" LocationResult="6" ></div></td>
+            </tr>
+            <tr>
+                <td> <div id="dropBox" LocationResult="7" ></div></td>
+                <td> <div id="dropBox" LocationResult="8" ></div></td>
+                <td> <div id="dropBox" LocationResult="9" ></div></td>
+            </tr>
+</table>
+    </div>
 
 </body>
 <script>
