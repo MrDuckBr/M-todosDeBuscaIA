@@ -35,7 +35,7 @@ function insertValues() {
       if (valorTeste[cont + k + j].innerText.length == 0) {
         console.log(valorTeste[cont + k + j].innerText);
         vetPieces[j][k] = new Peca(locationaux, j, k, 0);
-        blankLocation = [j, k];
+        blankLocation = [j, k,cont + j + k];
       } else {
         console.log(valorTeste[cont + k + j].innerText);
         vetPieces[j][k] = new Peca(
@@ -109,7 +109,7 @@ function Table() {
 
   pieceParents();
 
-  agentVerificator();
+  console.log(agentVerificator());
   console.log(finalState());
   //changePieces(vetPieces[0][0],vetPieces[1][0])
   render();
@@ -131,25 +131,25 @@ function pieceParentsAux(peca) {
 
   if (peca.row != 0 && peca.row <= 2) {
     // Nao pode se movimentar para cima
-    peca.parents["up"] = vetPieces[peca.row - 1][peca.column].peso;
+    peca.parents["up"] = vetPieces[peca.row - 1][peca.column];
   }
 
   if (peca.row != 2 && peca.row >= 0) {
-    peca.parents["down"] = vetPieces[peca.row + 1][peca.column].peso;
+    peca.parents["down"] = vetPieces[peca.row + 1][peca.column];
   }
 
   if (peca.column == 0) {
     // Nao pode se movimentar para cima
     peca.parents["left"] = null;
   } else {
-    peca.parents["left"] = vetPieces[peca.row][peca.column - 1].peso;
+    peca.parents["left"] = vetPieces[peca.row][peca.column - 1];
   }
 
   if (peca.column == 2) {
     // Nao pode se movimentar para baixo
     peca.parents["rigth"] = null;
   } else {
-    peca.parents["rigth"] = vetPieces[peca.row][peca.column + 1].peso;
+    peca.parents["rigth"] = vetPieces[peca.row][peca.column + 1];
   }
 }
 
@@ -184,8 +184,10 @@ function finalState() {
 function agentVerificator() {
   // Implementado, falta testar
   let parents = vetPieces[blankLocation[0]][blankLocation[1]].parents;
-  console.log(parents);
+  console.log("Parents",parents);//"Parentes do branco"
+//Desestruturando o objeto para vetor
   let aux = Object.keys(parents).map(function (key) {
+    console.log("Sou o parente amigao",parents[key])
     return parents[key];
   });
 
@@ -194,6 +196,8 @@ function agentVerificator() {
       return obj;
     }
   });
+
+
 
   return vetParents;
 }
@@ -232,20 +236,42 @@ function visitedPieces(vetAuxiliar) {
   //if(cont == vetAuxiliar.)
 }
 
+
 // Método de Busca em profundidade
 function hardSearch() {
   //Implementando
   let matrixAuxPieces = vetPieces;
   let vetMovementMatrix;
-  while (!finalState()) {
-    var vetParents = agentVerificator();
 
-    //Ver possibilidade de movimentação
-    //
-    //armazenar movimento
-    //
+  while (!finalState()) {
+    let vetParents = agentVerificator();//tenho os vizinhos do vazio
+    for (var i = 0; i < vetParents.length; i++) {
+      dfs(vetParents[i])
+    }
+
+
+
   }
 }
+
+function dfs(vizinho){
+  changePieces(vetPieces[blankLocation[0],blankLocation[1]],vizinho)
+  //Armazenando mudanca na tabela
+  vectorUpdate()
+  let vetParents2 = agentVerificator()
+  dfs()
+
+
+
+
+
+}
+
+let matrixChange
+function vectorUpdate(){ // colocar o hash aqui
+  matrixChange.push(vetPieces)
+}
+
 
 function render() {
   let valorTeste = [...document.querySelectorAll("[locationResult]")];
