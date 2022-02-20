@@ -8,6 +8,25 @@
   margin-top: -90px;
   color: white;
 }
+.sucess {
+  background-color: green !important;
+}
+
+.squareResult {
+  font-size: 90px;
+  /* text-align: center; */
+  text-align: center;
+  height: 100px;
+  width: 100px;
+  background-color: rgb(23, 23, 243);
+  margin-top: -90px;
+  color: white;
+}
+
+.vazio {
+  background-color: rgb(243, 243, 243) !important;
+  color: transparent;
+}
 
 #emptyTable {
   border: 1px solid black;

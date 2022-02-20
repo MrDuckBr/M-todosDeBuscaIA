@@ -1,175 +1,211 @@
-class Peca {
-	constructor(location, row, column, peso) {
-		this.location = location; // posicao atual
-		this.row = row; //
-		this.column = column; //
-		this.peso = peso; // valor da peça
-		this.parents = {
-			up: null,
-			down: null,
-			left: null,
-			rigth: null,
-		};
-	}
+let initialState;
+const goalState = [1, 2, 3, 8, 0, 4, 7, 6, 5];
 
-	updatePosition(newPosition) {
-		this.position = newPosition;
-	}
+class BFS {
+  constructor(initialState, goalState) {
+    this.initialState = initialState;
+    this.goalState = goalState;
+    this.allNodes = {};
+    this.visitedNodes = [];
+    this.Queue = [];
+    // ADD INITAL TO QUEUE
+    this.Queue.push(initialState);
+  }
+
+  // MOVE FUNCTIONS
+  swap(value, swapfrom, swapto) {
+    const temp = value[swapto];
+    value[swapto] = value[swapfrom];
+    value[swapfrom] = temp;
+    return value;
+  }
+
+  //   initialState[0].innerText
+  checkGoalState(value) {
+    // value is array
+    if (JSON.stringify(goalState).indexOf(JSON.stringify(value)) >= 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // GET POSSIBLE MOVES
+  getPossibleMoves(value) {
+    let mid = {
+      0: [{ swap: 1 }, { swap: 3 }],
+      1: [{ swap: 2 }, { swap: 4 }, { swap: 0 }],
+      2: [{ swap: 5 }, { swap: 1 }],
+      3: [{ swap: 0 }, { swap: 4 }, { swap: 6 }],
+      4: [{ swap: 1 }, { swap: 5 }, { swap: 7 }, { swap: 3 }],
+      5: [{ swap: 2 }, { swap: 8 }, { swap: 4 }],
+      6: [{ swap: 3 }, { swap: 7 }],
+      7: [{ swap: 4 }, { swap: 8 }, { swap: 6 }],
+      8: [{ swap: 5 }, { swap: 7 }],
+    };
+
+    return mid[value];
+  }
+
+  mov(visited) {
+    const locationResult = document.querySelectorAll("[locationResult]");
+    locationResult.forEach((item, index) => {
+      if (visited[index] == 0) {
+        item.querySelector("p").innerText = "";
+        item.querySelector("div").setAttribute("class", "squareResult vazio");
+      } else {
+        item.querySelector("p").innerText = visited[index];
+        item.querySelector("div").setAttribute("class", "squareResult");
+      }
+    });
+  }
+
+  sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  // initialState.find((item) => item.innerText == '')
+  main = async function () {
+    let index = this.Queue[0].indexOf(0);
+    let moves = this.getPossibleMoves(index);
+
+    // GET CHILDS
+    let childNodes = moves.map((item) => {
+      let temp = [...this.Queue[0]];
+      return this.swap(temp, index, item.swap);
+    });
+
+    childNodes.forEach((item) => {
+      if (JSON.stringify(this.Queue).indexOf(JSON.stringify(item)) == -1) {
+        // IF NOT FOUND ON QUEUE THEN INSERT IN QUEUE AND NOT IN VISITED
+        if (
+          JSON.stringify(this.visitedNodes).indexOf(JSON.stringify(item)) == -1
+        ) {
+          this.Queue.push(item);
+        }
+      }
+    });
+
+    let visited = this.Queue.splice(0, 1)[0];
+    this.visitedNodes.push(visited);
+
+    this.mov(visited);
+    await this.sleep(100);
+    // this.mov(this.initialState);
+
+    if (this.checkGoalState(visited)) {
+      // this.mov(visited);
+      console.log("FOUND");
+
+      const valorSucess = document.getElementsByClassName("squareResult");
+      for (let index = 0; index < valorSucess.length; index++)
+        valorSucess[index].setAttribute("class", "squareResult sucess");
+
+      // let output = document.getElementById("output");
+
+      // let t = "";
+      // this.visitedNodes.forEach((item) => {
+      //   console.log("passei");
+
+      //   t += '<div class="node">';
+      //   item.forEach((value) => {
+      //     console.log("result", value);
+      //     t += '<div class="node_item">' + value + "</div>";
+      //   });
+      //   t += '<div class="right_arrow">&rarr;</div>';
+      //   t += "</div>";
+      // });
+
+      // output.innerHTML = t;
+
+      console.log(this.visitedNodes.length);
+
+      return;
+    } else {
+      this.main();
+    }
+  };
 }
 
-var vetPieces;
-
-function insertValues() {
-	let valorTeste = document.querySelectorAll("[location]");
-
-	//for(let i=0;i<valorTeste.length;i++){
-	//  console.log(valorTeste[i].getAttribute("location") +'valor dentro' + valorTeste[i].innerText)
-
-	let cont = 0;
-	for (var j = 0; j < 3; j++) {
-		for (var k = 0; k < 3; k++) {
-			let locationaux = valorTeste[k + j + cont].getAttribute("location");
-			if (valorTeste[cont + k + j].innerText.length == 0) {
-				console.log(valorTeste[cont + k + j].innerText);
-				vetPieces[j][k] = new Peca(locationaux, j, k, 0);
-			} else {
-				console.log(valorTeste[cont + k + j].innerText);
-				vetPieces[j][k] = new Peca(
-					locationaux,
-					j,
-					k,
-					valorTeste[cont + k + j].innerText
-				);
-			}
-		}
-		cont += 2;
-	}
-}
-
+//ordem alatoria para a primira tabela
 function ordemAleatoria() {
-	const squares = [...document.getElementsByClassName("square")];
-	let valorTeste = [...document.querySelectorAll("[location]")];
-	shuffle(squares);
-	shuffle(valorTeste);
-	for (let index = 0; index < 8; index++) {
-		valorTeste[index].append(squares[index]);
-	}
-}
+  const squares = [...document.getElementsByClassName("square")];
+  let valorTeste = [...document.querySelectorAll("[location]")];
 
-function shuffle(array) {
-	let randomNumber;
-	let tmp;
-	for (let i = array.length; i; ) {
-		randomNumber = (Math.random() * i--) | 0;
-		tmp = array[randomNumber];
-		// troca o número aleatório pelo atual
-		array[randomNumber] = array[i];
-		// troca o atual pelo aleatório
-		array[i] = tmp;
-	}
-}
+  // console.log(squares, valorTeste);
+  // shuffle(squares);
+  // shuffle(valorTeste);
+  // for (let index = 0; index < 8; index++) {
+  //   valorTeste[index].append(squares[index]);
+  // }
+  valorTeste[0].append(squares[0]);
+  valorTeste[1].append(squares[1]);
+  valorTeste[2].append(squares[2]);
 
-var vetPecas;
+  valorTeste[5].append(squares[3]);
+  valorTeste[8].append(squares[4]);
+  valorTeste[7].append(squares[5]);
 
-function createMatrix() {
-	// Create one dimensional array
-	var vet = new Array(3);
+  valorTeste[6].append(squares[6]);
+  valorTeste[4].append(squares[7]);
 
-	// Loop to create 2D array using 1D array
-	for (var i = 0; i < vet.length; i++) {
-		vet[i] = [];
-	}
-	return vet;
+  function shuffle(array) {
+    let randomNumber;
+    let tmp;
+    for (let i = array.length; i; ) {
+      randomNumber = (Math.random() * i--) | 0;
+      tmp = array[randomNumber];
+      // troca o número aleatório pelo atual
+      array[randomNumber] = array[i];
+      // troca o atual pelo aleatório
+      array[i] = tmp;
+    }
+  }
 }
 
 function Table() {
-	vetPieces = createMatrix();
-	console.log("passei aqui");
-	ordemAleatoria();
-	insertValues();
-	console.log("passei aqui2");
+  //ordemAleatoria();
+  renderResult();
 
-	for (var i = 0; i < 3; i++) {
-		for (var j = 0; j < 3; j++) {
-			pieceParents(vetPieces[i][j]);
-		}
-	}
-
-	for (var i = 0; i < 3; i++) {
-		for (var j = 0; j < 3; j++) {
-			console.log(vetPieces[i][j]);
-		}
-	}
+  const bfs = new BFS(
+    initialState.map((oi) => parseInt(oi.innerText == "" ? 0 : oi.innerText)),
+    goalState
+  );
+  bfs.main();
 }
 
-function pieceParents(peca) {
-	if (peca.row != 0 && peca.row <= 2) {
-		// Nao pode se movimentar para cima
-		peca.parents["up"] = vetPieces[peca.row - 1][peca.column].peso;
-	}
+function renderResult() {
+  let valorTeste = [...document.querySelectorAll("[locationResult]")];
+  let locationPadrao = [...document.querySelectorAll("[location]")];
+  let cont = 0;
+  for (var i = 0; i < 3; i++) {
+    for (var j = 0; j < 3; j++) {
+      valorTeste[i + j + cont].innerHTML = "";
+      if (locationPadrao[i + j + cont].querySelector("p") != null) {
+        let squareResult = document.createElement("div");
+        squareResult.setAttribute("class", "squareResult");
+        squareResult.setAttribute("id", i + j + cont);
+        squareResult.innerHTML = `<p id=${
+          locationPadrao[i + j + cont].querySelector("p").textContent
+        } > ${
+          locationPadrao[i + j + cont].querySelector("p").textContent
+        } </p>`;
 
-	if (peca.row != 2 && peca.row >= 0) {
-		peca.parents["down"] = vetPieces[peca.row + 1][peca.column].peso;
-	}
+        valorTeste[i + j + cont].append(squareResult);
+      } else {
+        let squareResult = document.createElement("div");
+        squareResult.setAttribute("class", "squareResult vazio");
+        squareResult.setAttribute("id", i + j + cont);
+        squareResult.innerHTML = `<p id=
+          -1
+         ></p>`;
 
-	if (peca.column == 0) {
-		// Nao pode se movimentar para cima
-		peca.parents["left"] = null;
-	} else {
-		peca.parents["left"] = vetPieces[peca.row][peca.column - 1].peso;
-	}
-
-	if (peca.column == 2) {
-		// Nao pode se movimentar para baixo
-		peca.parents["rigth"] = null;
-	} else {
-		peca.parents["rigth"] = vetPieces[peca.row][peca.column + 1].peso;
-	}
+        valorTeste[i + j + cont].append(squareResult);
+      }
+    }
+    cont += 2;
+  }
+  initialState = [...valorTeste];
 }
 
-function verifyFields() {
-	//Função que verifica se os campos estão preenchidos corretamente
-}
-
-//Estado final da máquina no forca bruta
-function finalState() {
-	let finalStateVector = [1, 2, 3, 8, 0, 4, 7, 6, 5];
-	let count = 0;
-	let countFinalState = 0;
-
-	for (let i = 0; i < 3; i++) {
-		for (let j = 0; j < 3; j++) {
-			if (vetPieces[i][j] == finalStateVector[count]) {
-				countFinalState++;
-			}
-			count++;
-		}
-	}
-
-	if (countFinalState == 9) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-function agentVerificator() {}
-
-function agentValidator() {}
-
-function agentRunner() {}
-
-function changePieces(piece1, piece2) {
-	if (piece1.parents[up] == piece2.peso) {
-		// peca 1 em baixo
-	} else if (piece1.parents[down] == piece2.peso) {
-		// peca 1 em cima
-	} else if (piece1.parents[left] == piece2.peso) {
-	}
-}
-
-//pegar as peças organizadas no html
-//calcular resposta/
-//voltar para a pagina principal
-
-// teste de commit
+ordemAleatoria();
