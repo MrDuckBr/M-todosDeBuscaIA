@@ -1,6 +1,14 @@
 let initialState;
 const goalState = [1, 2, 3, 8, 0, 4, 7, 6, 5];
+const goalStateMatrix = [
+  [1, 2, 3],
+  [8, 0, 4],
+  [7, 6, 5],
+];
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 class BFS {
   constructor(initialState, goalState) {
     this.initialState = initialState;
@@ -60,10 +68,6 @@ class BFS {
     });
   }
 
-  sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   // initialState.find((item) => item.innerText == '')
   main = async function () {
     let index = this.Queue[0].indexOf(0);
@@ -90,17 +94,18 @@ class BFS {
     this.visitedNodes.push(visited);
 
     this.mov(visited);
-    await this.sleep(100);
+    await sleep(1);
     // this.mov(this.initialState);
 
     if (this.checkGoalState(visited)) {
       // this.mov(visited);
-      console.log("FOUND");
+      console.log("FOUND CEGA = ", this.visitedNodes.length - 1);
 
       const valorSucess = document.getElementsByClassName("squareResult");
       for (let index = 0; index < valorSucess.length; index++)
         valorSucess[index].setAttribute("class", "squareResult sucess");
 
+      //Codigo para mostar o passo a passo
       // let output = document.getElementById("output");
 
       // let t = "";
@@ -118,8 +123,6 @@ class BFS {
 
       // output.innerHTML = t;
 
-      console.log(this.visitedNodes.length);
-
       return;
     } else {
       this.main();
@@ -127,12 +130,155 @@ class BFS {
   };
 }
 
+class Node {
+  constructor(data, level, fval) {
+    // sets data arr
+    this.data = data;
+    // sets node's level
+    this.level = level;
+    // sets node's Manhattan Distance
+    this.fval = fval;
+  }
+
+  // generate node children
+  generateChild() {
+    let { x, y } = this.find(this.data);
+    const val_list = [
+      [x, y - 1],
+      [x, y + 1],
+      [x - 1, y],
+      [x + 1, y],
+    ];
+    const children = [];
+    for (const i in val_list) {
+      const child = this.shuffle(
+        this.data,
+        x,
+        y,
+        val_list[i][0],
+        val_list[i][1]
+      );
+      if (child !== null) {
+        const childNode = new Node(child, this.level + 1, 0);
+        children.push(childNode);
+      }
+    }
+    return children;
+  }
+
+  // move pieces
+  shuffle(puz, x1, y1, x2, y2) {
+    if (x2 >= 0 && x2 < this.data.length && y2 >= 0 && y2 < this.data.length) {
+      let temp_puz = [];
+      temp_puz = puz.map((el) => el.map((element) => element));
+      const temp = temp_puz[x2][y2];
+      temp_puz[x2][y2] = temp_puz[x1][y1];
+      temp_puz[x1][y1] = temp;
+      return temp_puz;
+    } else {
+      return null;
+    }
+  }
+
+  // finds blank in data
+  find(puz) {
+    for (let i = 0; i < this.data.length; i++) {
+      for (let j = 0; j < this.data.length; j++) {
+        if (puz[i][j] === 0) {
+          return { x: i, y: j };
+        }
+      }
+    }
+  }
+}
+
+class Puzzle {
+  constructor(size, start, goal) {
+    // sets Puzzle size
+    this.n = size;
+    // sets start state
+    this.start = new Node(start, 0, 0);
+    // sets goal state
+    this.goal = goal;
+    // open options
+    this.open = [];
+    // closed options
+    this.closed = [];
+    // control vars
+    this.started = false;
+    this.finished = false;
+    this.solution = undefined;
+  }
+
+  // gets heuristc value
+  f(start) {
+    return this.h(start.data, this.goal) + start.level;
+  }
+
+  // gets Manhattan Distance
+  h(start, goal) {
+    let temp = 0;
+    for (let i = 0; i < this.n; i++) {
+      for (let j = 0; j < this.n; j++) {
+        if (start[i][j] != goal[i][j] && start[i][j] !== 0) {
+          temp++;
+        }
+      }
+    }
+    return temp;
+  }
+
+  initiate() {
+    if (this.started) return;
+    this.start.fval = this.f(this.start);
+    this.open = [];
+    this.closed = [];
+    this.open.push(this.start);
+    this.started = true;
+  }
+
+  proccess() {
+    if (this.finished) return true;
+    if (this.open.length === 0) return false;
+    // picks best option
+    const cur = this.open.shift();
+    // checks if cur is goal
+    if (cur.fval === cur.level) {
+      this.finished = true;
+      this.solution = cur;
+      return true;
+    }
+    // generate cur childs
+    const temp = cur.generateChild();
+    for (const i in temp) {
+      const data = temp[i];
+      data.fval = this.f(data);
+      // only add to open if not already done
+      let aux = false;
+      this.closed.map((el) => {
+        if (this.h(data.data, el.data) === 0) aux = true;
+      });
+      if (!aux) this.open.push(data);
+    }
+    // closes cur
+    this.closed.push(cur);
+    // sorts best available options
+    this.open.sort((a, b) => {
+      if (a.fval > b.fval) return 1;
+      if (a.fval < b.fval) return -1;
+      return 0;
+    });
+    return this.open[0].data;
+  }
+}
+
 //ordem alatoria para a primira tabela
 function ordemAleatoria() {
   const squares = [...document.getElementsByClassName("square")];
   let valorTeste = [...document.querySelectorAll("[location]")];
 
-  // console.log(squares, valorTeste);
+  // aleatorio corre o risco de nao ter solucao
+
   // shuffle(squares);
   // shuffle(valorTeste);
   // for (let index = 0; index < 8; index++) {
@@ -147,7 +293,7 @@ function ordemAleatoria() {
   valorTeste[7].append(squares[5]);
 
   valorTeste[6].append(squares[6]);
-  valorTeste[4].append(squares[7]);
+  valorTeste[3].append(squares[7]);
 
   function shuffle(array) {
     let randomNumber;
@@ -206,6 +352,91 @@ function renderResult() {
     cont += 2;
   }
   initialState = [...valorTeste];
+}
+
+function tester(puzzleAStar) {
+  let aaa = [];
+  let element = [];
+  for (let index = 1; index <= 9; index++) {
+    element.push(
+      initialState[index - 1].innerText == ""
+        ? 0
+        : parseInt(initialState[index - 1].innerText)
+    );
+    if (index != 0 && index % 3 == 0) {
+      aaa.push(element);
+      element = [];
+    }
+  }
+
+  if (!puzzleAStar.started || puzzleAStar.finished) {
+    delete puzzleAStar;
+    puzzleAStar = new Puzzle(3, aaa, goalStateMatrix);
+    puzzleAStar.initiate();
+  }
+
+  let temp = puzzleAStar.proccess();
+  if (temp === true) {
+    const valorSucess = document.getElementsByClassName("squareResult");
+    for (let index = 0; index < valorSucess.length; index++)
+      valorSucess[index].setAttribute("class", "squareResult sucess");
+    return true;
+  } else if (temp === false) return false;
+  else {
+    mov(temp);
+    return null;
+  }
+}
+
+function mov(visited) {
+  const locationResult = document.querySelectorAll("[locationResult]");
+
+  let vet = [];
+  let cont = 0;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      vet[i + j + cont] = visited[i][j];
+    }
+    cont += 2;
+  }
+
+  locationResult.forEach((item, index) => {
+    if (vet[index] == 0) {
+      item.querySelector("p").innerText = "";
+      item.querySelector("div").setAttribute("class", "squareResult vazio");
+    } else {
+      item.querySelector("p").innerText = vet[index];
+      item.querySelector("div").setAttribute("class", "squareResult");
+    }
+  });
+}
+
+async function aStar() {
+  renderResult();
+
+  let temp;
+  let aaa = [];
+  let element = [];
+  for (let index = 1; index <= 9; index++) {
+    element.push(
+      initialState[index - 1].innerText == ""
+        ? 0
+        : parseInt(initialState[index - 1].innerText)
+    );
+    if (index != 0 && index % 3 == 0) {
+      aaa.push(element);
+      element = [];
+    }
+  }
+  let puzzleAStar = new Puzzle(3, aaa, goalStateMatrix);
+  puzzleAStar.initiate();
+  let cont = -1;
+  do {
+    temp = tester(puzzleAStar);
+    cont++;
+    await sleep(1);
+  } while (temp === null);
+  console.log("FOUND HEURISTICA = ", cont);
 }
 
 ordemAleatoria();
