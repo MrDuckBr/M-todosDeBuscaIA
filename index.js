@@ -90,7 +90,7 @@ class BFS {
     this.visitedNodes.push(visited);
 
     this.mov(visited);
-    await this.sleep(100);
+    await this.sleep(10);
     // this.mov(this.initialState);
 
     if (this.checkGoalState(visited)) {
@@ -125,6 +125,161 @@ class BFS {
       this.main();
     }
   };
+}
+
+class Node {
+  constructor(data, level, fval) {
+    // sets data arr
+    this.data = data;
+    // sets node's level
+    this.level = level;
+    // sets node's Manhattan Distance
+    this.fval = fval;
+  }
+
+  // GET POSSIBLE MOVES
+  getPossibleMoves(value) {
+    let mid = {
+      0: [{ swap: 1 }, { swap: 3 }],
+      1: [{ swap: 2 }, { swap: 4 }, { swap: 0 }],
+      2: [{ swap: 5 }, { swap: 1 }],
+      3: [{ swap: 0 }, { swap: 4 }, { swap: 6 }],
+      4: [{ swap: 1 }, { swap: 5 }, { swap: 7 }, { swap: 3 }],
+      5: [{ swap: 2 }, { swap: 8 }, { swap: 4 }],
+      6: [{ swap: 3 }, { swap: 7 }],
+      7: [{ swap: 4 }, { swap: 8 }, { swap: 6 }],
+      8: [{ swap: 5 }, { swap: 7 }],
+    };
+
+    return mid[value];
+  }
+
+  // generate node children
+  generateChild() {
+    let index = this.data.indexOf(0);
+    let moves = this.getPossibleMoves(index);
+
+    const children = moves.map((item) => {
+      return new Node(
+        this.swap([...this.data], index, item.swap),
+        this.level + 1,
+        0
+      );
+    });
+    return children;
+  }
+
+  // MOVE FUNCTIONS
+  swap(value, swapfrom, swapto) {
+    const temp = value[swapto];
+    value[swapto] = value[swapfrom];
+    value[swapfrom] = temp;
+    return value;
+  }
+}
+
+class Puzzle {
+  constructor(size, start, goal) {
+    // sets Puzzle size
+    this.n = size;
+    // sets start state
+    this.start = new Node(start, 0, 0);
+    // sets goal state
+    this.goal = goal;
+    // open options
+    this.open = [];
+    // closed options
+    this.closed = [];
+    // control vars
+    this.started = false;
+    this.finished = false;
+    this.solution = undefined;
+  }
+
+  // gets heuristc value
+  f(start) {
+    return this.h(start.data, this.goal) + start.level;
+  }
+
+  // gets Manhattan Distance
+  h(start, goal) {
+    let temp = 0;
+    for (let index = 0; index < 9; index++) {
+      if (start[index] != goal[index] && start[index] !== 0) {
+        temp++;
+      }
+    }
+    // for (let i = 0; i < this.n; i++) {
+    //   for (let j = 0; j < this.n; j++) {
+    //     if (start[i][j] != goal[i][j] && start[i][j] !== 0) {
+    //       temp++;
+    //     }
+    //   }
+    // }
+    return temp;
+  }
+
+  initiate() {
+    if (this.started) return;
+    this.start.fval = this.f(this.start);
+    this.open = [];
+    this.closed = [];
+    this.open.push(this.start);
+    this.started = true;
+  }
+
+  mov(visited) {
+    const locationResult = document.querySelectorAll("[locationResult]");
+    locationResult.forEach((item, index) => {
+      if (visited[index] == 0) {
+        item.querySelector("p").innerText = "";
+        item.querySelector("div").setAttribute("class", "squareResult vazio");
+      } else {
+        item.querySelector("p").innerText = visited[index];
+        item.querySelector("div").setAttribute("class", "squareResult");
+      }
+    });
+  }
+
+  proccess() {
+    if (this.finished) return true;
+    if (this.open.length === 0) return false;
+    // picks best option
+    const cur = this.open[0];
+    // checks if cur is goal
+    if (cur.fval === cur.level) {
+      this.finished = true;
+      this.solution = cur;
+      return true;
+    }
+    // generate cur childs
+    const temp = cur.generateChild();
+    console.log("temp", temp);
+    for (const i in temp) {
+      const data = temp[i];
+      data.fval = this.f(data);
+      // only add to open if not already done
+      let aux = false;
+      this.closed.map((el) => {
+        console.log("el", el);
+        if (this.h(data.data, el.data) === 0) aux = true;
+      });
+      console.log("aux", !aux);
+      if (!aux) this.open.push(data);
+    }
+    // closes cur
+    console.log("cur", cur);
+    this.closed.push(cur);
+    delete this.open[0];
+    // sorts best available options
+    this.open.sort((a, b) => {
+      if (a.fval > b.fval) return 1;
+      if (a.fval < b.fval) return -1;
+      return 0;
+    });
+    this.mov(this.open[0].data);
+    return this.open[0].data;
+  }
 }
 
 //ordem alatoria para a primira tabela
@@ -206,6 +361,36 @@ function renderResult() {
     cont += 2;
   }
   initialState = [...valorTeste];
+}
+
+function aStar() {
+  renderResult();
+  let puzzleAStar = new Puzzle(
+    3,
+    initialState.map((oi) => parseInt(oi.innerText == "" ? 0 : oi.innerText)),
+    goalState
+  );
+  if (!puzzleAStar.started || puzzleAStar.finished) {
+    delete puzzleAStar;
+    puzzleAStar = new Puzzle(
+      3,
+      initialState.map((oi) => parseInt(oi.innerText == "" ? 0 : oi.innerText)),
+      goalState
+    );
+    puzzleAStar.initiate();
+  }
+
+  let temp = puzzleAStar.proccess();
+  if (temp === true) {
+    console.log("temp1", temp);
+    return true;
+  } else if (temp === false) {
+    console.log("temp2", temp);
+    return false;
+  } else {
+    console.log("temp3", temp);
+    return null;
+  }
 }
 
 ordemAleatoria();
