@@ -8,6 +8,9 @@
   margin-top: -90px;
   color: white;
 }
+.sucess {
+  background-color: green !important;
+}
 
 .squareResult {
   font-size: 90px;
@@ -20,9 +23,10 @@
   color: white;
 }
 
-
-
-
+.vazio {
+  background-color: rgb(243, 243, 243) !important;
+  color: transparent;
+}
 
 #emptyTable {
   border: 1px solid black;
