@@ -106,11 +106,11 @@ class BFS {
 
     this.mov(visited);
     await sleep(1);
-    // this.mov(this.initialState);
 
     if (this.checkGoalState(visited)) {
-      // this.mov(visited);
       console.log("FOUND CEGA = ", this.visitedNodes.length - 1);
+      let resultado = document.getElementById("resultadoCegaLabbel")
+    resultado.innerHTML = `Número de Comparações = ${this.visitedNodes.length - 1}`
       
 
       const valorSucess = document.getElementsByClassName("squareResult");
@@ -434,6 +434,8 @@ async function aStar() {
     await sleep(1);
   } while (temp === null);
   console.log("FOUND HEURISTICA = ", cont);
+  let finalCost = document.getElementById("resultadoAstarLabbel")
+  finalCost.innerHTML = `Número de comparações = ${cont}`
 }
 
 
