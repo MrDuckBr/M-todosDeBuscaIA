@@ -49,14 +49,16 @@
   color: rgb(255, 166, 1);
 }
 
-.inline{
-  display: inline-block;
-  
-
-  
+.inline {
+  flex-direction: row;
+  padding-left: 10px;
 }
 
-.styleButton{
+.container {
+  display: flex;
+}
+
+.styleButton {
   border-radius: 12px;
   transition-duration: 0.4s;
   font-size: 20px;
@@ -67,23 +69,17 @@
   color: white;
 }
 
-.tableName{
+.tableName {
   font-size: 20px;
 
   display: inline-block;
 }
 
-
-
-
-#divStyleButtom{
+#divStyleButtom {
   padding-left: 30%;
   padding-top: 5%;
 }
 
-
-#Nomes{
+.Nomes {
   font-size: 30px;
 }
-
-

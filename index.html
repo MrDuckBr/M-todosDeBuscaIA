@@ -8,8 +8,9 @@
     <title>Document</title>
   </head>
 
-  <body id="Body" >
-    <div id="table" >
+  <body id="Body">
+    <h1 class="Nomes"><b>Jogo dos Oito </b></h1>
+    <div id="table">
       <table id="tableStyle">
         <tr>
           <td>
@@ -96,164 +97,162 @@
       </table>
     </div>
 
-    <div class="inline">
-      <table id="emptyTable">
-        <tr>
-          <td>
-            <div
-              id="dropBox"
-              location="1"
-              LocationStar="1"
-              ondragover="dragOver(event);"
-              ondrop="drop(event);"
-            ></div>
-          </td>
-          <td>
-            <div
-              id="dropBox"
-              location="2"
-              LocationStar="2"
-              ondragover="dragOver(event);"
-              ondrop="drop(event);"
-            ></div>
-          </td>
-          <td>
-            <div
-              id="dropBox"
-              location="3"
-              LocationStar="3"
-              ondragover="dragOver(event);"
-              ondrop="drop(event);"
-            ></div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div
-              id="dropBox"
-              location="4"
-              LocationStar="4"
-              ondragover="dragOver(event);"
-              ondrop="drop(event);"
-            ></div>
-          </td>
-          <td>
-            <div
-              id="dropBox"
-              location="5"
-              LocationStar="5"
-              ondragover="dragOver(event);"
-              ondrop="drop(event);"
-            ></div>
-          </td>
-          <td>
-            <div
-              id="dropBox"
-              location="6"
-              LocationStar="6"
-              ondragover="dragOver(event);"
-              ondrop="drop(event);"
-            ></div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div
-              id="dropBox"
-              location="7"
-              LocationStar="7"
-              ondragover="dragOver(event);"
-              ondrop="drop(event);"
-            ></div>
-          </td>
-          <td>
-            <div
-              id="dropBox"
-              location="8"
-              LocationStar="8"
-              ondragover="dragOver(event);"
-              ondrop="drop(event);"
-            ></div>
-          </td>
-          <td>
-            <div
-              id="dropBox"
-              location="9"
-              LocationStar="9"
-              ondragover="dragOver(event);"
-              ondrop="drop(event);"
-            ></div>
-          </td>
-        </tr>
-      </table>
-    </div>
+    <div class="container">
+      <div>
+        <table id="emptyTable">
+          <tr>
+            <td>
+              <div
+                id="dropBox"
+                location="1"
+                LocationStar="1"
+                ondragover="dragOver(event);"
+                ondrop="drop(event);"
+              ></div>
+            </td>
+            <td>
+              <div
+                id="dropBox"
+                location="2"
+                LocationStar="2"
+                ondragover="dragOver(event);"
+                ondrop="drop(event);"
+              ></div>
+            </td>
+            <td>
+              <div
+                id="dropBox"
+                location="3"
+                LocationStar="3"
+                ondragover="dragOver(event);"
+                ondrop="drop(event);"
+              ></div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                id="dropBox"
+                location="4"
+                LocationStar="4"
+                ondragover="dragOver(event);"
+                ondrop="drop(event);"
+              ></div>
+            </td>
+            <td>
+              <div
+                id="dropBox"
+                location="5"
+                LocationStar="5"
+                ondragover="dragOver(event);"
+                ondrop="drop(event);"
+              ></div>
+            </td>
+            <td>
+              <div
+                id="dropBox"
+                location="6"
+                LocationStar="6"
+                ondragover="dragOver(event);"
+                ondrop="drop(event);"
+              ></div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                id="dropBox"
+                location="7"
+                LocationStar="7"
+                ondragover="dragOver(event);"
+                ondrop="drop(event);"
+              ></div>
+            </td>
+            <td>
+              <div
+                id="dropBox"
+                location="8"
+                LocationStar="8"
+                ondragover="dragOver(event);"
+                ondrop="drop(event);"
+              ></div>
+            </td>
+            <td>
+              <div
+                id="dropBox"
+                location="9"
+                LocationStar="9"
+                ondragover="dragOver(event);"
+                ondrop="drop(event);"
+              ></div>
+            </td>
+          </tr>
+        </table>
+      </div>
 
+      <div id="result" class="inline">
+        <table id="resultTable">
+          <tr>
+            <td><div id="dropBox" LocationResult="1"></div></td>
+            <td><div id="dropBox" LocationResult="2"></div></td>
+            <td><div id="dropBox" LocationResult="3"></div></td>
+          </tr>
+          <tr>
+            <td><div id="dropBox" LocationResult="4"></div></td>
+            <td><div id="dropBox" LocationResult="5"></div></td>
+            <td><div id="dropBox" LocationResult="6"></div></td>
+          </tr>
+          <tr>
+            <td><div id="dropBox" LocationResult="7"></div></td>
+            <td><div id="dropBox" LocationResult="8"></div></td>
+            <td><div id="dropBox" LocationResult="9"></div></td>
+          </tr>
+        </table>
+        <span class="tableName">Resultado Força Bruta</span>
+        <span id="ResultBruteForce"></span>
+        <div id="resultadoCegaLabbel"></div>
+      </div>
 
-    <div id="result" class="inline">
-      
-      <table id="resultTable">
-        <tr>
-          <td><div id="dropBox" LocationResult="1"></div></td>
-          <td><div id="dropBox" LocationResult="2"></div></td>
-          <td><div id="dropBox" LocationResult="3"></div></td>
-        </tr>
-        <tr>
-          <td><div id="dropBox" LocationResult="4"></div></td>
-          <td><div id="dropBox" LocationResult="5"></div></td>
-          <td><div id="dropBox" LocationResult="6"></div></td>
-        </tr>
-        <tr>
-          <td><div id="dropBox" LocationResult="7"></div></td>
-          <td><div id="dropBox" LocationResult="8"></div></td>
-          <td><div id="dropBox" LocationResult="9"></div></td>
-        </tr>
-      </table>
-      <span class="tableName">Resultado Força Bruta</span>
-      <div id="resultadoCegaLabbel"></div>
-      <span id="ResultBruteForce"></span>
-    </div>
+      <div class="inline">
+        <table id="resultTableaAstar">
+          <tr>
+            <td><div id="dropBox" LocationResultaStar="1"></div></td>
+            <td><div id="dropBox" LocationResultaStar="2"></div></td>
+            <td><div id="dropBox" LocationResultaStar="3"></div></td>
+          </tr>
+          <tr>
+            <td><div id="dropBox" LocationResultaStar="4"></div></td>
+            <td><div id="dropBox" LocationResultaStar="5"></div></td>
+            <td><div id="dropBox" LocationResultaStar="6"></div></td>
+          </tr>
+          <tr>
+            <td><div id="dropBox" LocationResultaStar="7"></div></td>
+            <td><div id="dropBox" LocationResultaStar="8"></div></td>
+            <td><div id="dropBox" LocationResultaStar="9"></div></td>
+          </tr>
+        </table>
 
-    <div  class="inline">
-      
-      <table id="resultTableaAstar">
-        <tr>
-          <td><div id="dropBox" LocationResultaStar="1"></div></td>
-          <td><div id="dropBox" LocationResultaStar="2"></div></td>
-          <td><div id="dropBox" LocationResultaStar="3"></div></td>
-        </tr>
-        <tr>
-          <td><div id="dropBox" LocationResultaStar="4"></div></td>
-          <td><div id="dropBox" LocationResultaStar="5"></div></td>
-          <td><div id="dropBox" LocationResultaStar="6"></div></td>
-        </tr>
-        <tr>
-          <td><div id="dropBox" LocationResultaStar="7"></div></td>
-          <td><div id="dropBox" LocationResultaStar="8"></div></td>
-          <td><div id="dropBox" LocationResultaStar="9"></div></td>
-        </tr>
-      </table>
-      
-      <span class="tableName">Resultado A*</span>
-      <div id="resultadoAstarLabbel"></div>
-    </div>
-    
-   
-
-    
-    <div id="output"></div>
-    <div id="divStyleButtom">
-      <button onclick="Table();" class="styleButton">Cega</button>
-      <button onclick="aStar()" class="styleButton">Heuristica</button>
-      <button onclick="ordemAleatoria();" class="styleButton">Aleatorio</button>
-      <button onclick="play();" class="styleButton">Jogar</button>
-      <!-- <button onclick="changePeca(0,1);">change</button> -->
-      
-        <div class="Nomes">Caio Gottmann Fernandes Morais</div> <br>
-        <div class="Nomes">Walisson Mendes Ferreira</div>
-  
+        <span class="tableName">Resultado A*</span>
+        <div id="resultadoAstarLabbel"></div>
       </div>
     </div>
-    
+
+      <div id="output"></div>
+      <div id="divStyleButtom">
+        <button onclick="Table();" class="styleButton">Cega</button>
+        <button onclick="aStar()" class="styleButton">Heuristica</button>
+        <button onclick="ordemAleatoria();" class="styleButton">
+          Aleatorio
+        </button>
+        <button onclick="play();" class="styleButton">Jogar</button>
+        <!-- <button onclick="changePeca(0,1);">change</button> -->
+
+        <div class="Nomes">
+          Caio Gottmann Fernandes Morais
+            <br>
+          Walisson Mendes Ferreira</div>
+      </div>
+    </div>
   </body>
   <script>
     function dragStart(e) {
