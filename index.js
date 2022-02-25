@@ -6,9 +6,12 @@ const goalStateMatrix = [
   [7, 6, 5],
 ];
 
+//Método que define um tempo de espera para que a atualização da matriz possa ser vista.
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+// Classe que realiza a BFS (No caso modelo de força bruta)
 class BFS {
   constructor(initialState, goalState) {
     this.initialState = initialState;
@@ -28,7 +31,13 @@ class BFS {
     return value;
   }
 
-  //   initialState[0].innerText
+  /*Utilizando o stringfy criamos um objeto que o mesmo se torna a chave e verificamos se a chave chegou no estado final
+  Estado final:{ 
+                1,2,3
+                8,0,4
+                7,6,5
+        }
+  */
   checkGoalState(value) {
     // value is array
     if (JSON.stringify(goalState).indexOf(JSON.stringify(value)) >= 0) {
@@ -38,7 +47,8 @@ class BFS {
     }
   }
 
-  // GET POSSIBLE MOVES
+  //Método que define o movimento de cada peça na matriz
+
   getPossibleMoves(value) {
     let mid = {
       0: [{ swap: 1 }, { swap: 3 }],
@@ -55,6 +65,7 @@ class BFS {
     return mid[value];
   }
 
+  //Método responsavel por atualizar a tabela no html
   mov(visited) {
     const locationResult = document.querySelectorAll("[locationResult]");
     locationResult.forEach((item, index) => {
@@ -68,7 +79,7 @@ class BFS {
     });
   }
 
-  // initialState.find((item) => item.innerText == '')
+  //Método responsavel por iniciar a BFS( Força Bruta)
   main = async function () {
     let index = this.Queue[0].indexOf(0);
     let moves = this.getPossibleMoves(index);
@@ -100,28 +111,11 @@ class BFS {
     if (this.checkGoalState(visited)) {
       // this.mov(visited);
       console.log("FOUND CEGA = ", this.visitedNodes.length - 1);
+      
 
       const valorSucess = document.getElementsByClassName("squareResult");
       for (let index = 0; index < valorSucess.length; index++)
         valorSucess[index].setAttribute("class", "squareResult sucess");
-
-      //Codigo para mostar o passo a passo
-      // let output = document.getElementById("output");
-
-      // let t = "";
-      // this.visitedNodes.forEach((item) => {
-      //   console.log("passei");
-
-      //   t += '<div class="node">';
-      //   item.forEach((value) => {
-      //     console.log("result", value);
-      //     t += '<div class="node_item">' + value + "</div>";
-      //   });
-      //   t += '<div class="right_arrow">&rarr;</div>';
-      //   t += "</div>";
-      // });
-
-      // output.innerHTML = t;
 
       return;
     } else {
@@ -270,6 +264,30 @@ class Puzzle {
     });
     return this.open[0].data;
   }
+
+  mov(visited) {
+    const locationResult = document.querySelectorAll("[locationResultaStar]");
+  
+    let vet = [];
+    let cont = 0;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        vet[i + j + cont] = visited[i][j];
+      }
+      cont += 2;
+    }
+  
+    locationResult.forEach((item, index) => {
+      if (vet[index] == 0) {
+        item.querySelector("p").innerText = "";
+        item.querySelector("div").setAttribute("class", "squareResult vazio");
+      } else {
+        item.querySelector("p").innerText = vet[index];
+        item.querySelector("div").setAttribute("class", "squareResult");
+      }
+    });
+  }
+
 }
 
 //ordem alatoria para a primira tabela
@@ -383,36 +401,15 @@ function tester(puzzleAStar) {
     return true;
   } else if (temp === false) return false;
   else {
-    mov(temp);
+    puzzleAStar.mov(temp);
     return null;
   }
 }
 
-function mov(visited) {
-  const locationResult = document.querySelectorAll("[locationResult]");
 
-  let vet = [];
-  let cont = 0;
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      vet[i + j + cont] = visited[i][j];
-    }
-    cont += 2;
-  }
-
-  locationResult.forEach((item, index) => {
-    if (vet[index] == 0) {
-      item.querySelector("p").innerText = "";
-      item.querySelector("div").setAttribute("class", "squareResult vazio");
-    } else {
-      item.querySelector("p").innerText = vet[index];
-      item.querySelector("div").setAttribute("class", "squareResult");
-    }
-  });
-}
 
 async function aStar() {
-  renderResult();
+  renderResultAStar();
 
   let temp;
   let aaa = [];
@@ -437,6 +434,46 @@ async function aStar() {
     await sleep(1);
   } while (temp === null);
   console.log("FOUND HEURISTICA = ", cont);
+}
+
+
+function renderResultAStar() {
+  let valorTeste = [...document.querySelectorAll("[LocationResultaStar]")];
+  let locationPadrao = [...document.querySelectorAll("[LocationStar]")];
+  let cont = 0;
+  for (var i = 0; i < 3; i++) {
+    for (var j = 0; j < 3; j++) {
+      valorTeste[i + j + cont].innerHTML = "";
+      if (locationPadrao[i + j + cont].querySelector("p") != null) {
+        let squareResult = document.createElement("div");
+        squareResult.setAttribute("class", "squareResult");
+        squareResult.setAttribute("id", i + j + cont);
+        squareResult.innerHTML = `<p id=${
+          locationPadrao[i + j + cont].querySelector("p").textContent
+        } > ${
+          locationPadrao[i + j + cont].querySelector("p").textContent
+        } </p>`;
+
+        valorTeste[i + j + cont].append(squareResult);
+      } else {
+        let squareResult = document.createElement("div");
+        squareResult.setAttribute("class", "squareResult vazio");
+        squareResult.setAttribute("id", i + j + cont);
+        squareResult.innerHTML = `<p id=
+          -1
+         ></p>`;
+
+        valorTeste[i + j + cont].append(squareResult);
+      }
+    }
+    cont += 2;
+  }
+  initialState = [...valorTeste];
+}
+
+function play(){
+  Table()
+  aStar()
 }
 
 ordemAleatoria();
