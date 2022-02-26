@@ -7,8 +7,8 @@ const goalStateMatrix = [
 ];
 
 //Método que define um tempo de espera para que a atualização da matriz possa ser vista.
-function sleep() {
-  return new Promise((resolve) => setTimeout(resolve, 500));
+function sleep(ms = 1) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // Classe que realiza a BFS (No caso modelo de força bruta)
@@ -81,7 +81,7 @@ class BFS {
 
   //Metodo responsável por realizar a aleatoriedade plausivel para o jogo
   shuffle = () => {
-    let rand = Math.floor(Math.random() * 10);
+    let rand = Math.floor(Math.random() * 30);
     for (let index = 0; index < rand; index++) {
       let index = this.Queue[0].indexOf(0);
       let moves = this.getPossibleMoves(index);
@@ -142,7 +142,9 @@ class BFS {
         this.visitedNodes.length - 1
       }`;
 
-      const valorSucess = document.getElementsByClassName("squareResult");
+      const valorSucess = document.querySelectorAll(
+        "[locationResult] .squareResult"
+      );
       for (let index = 0; index < valorSucess.length; index++)
         valorSucess[index].setAttribute("class", "squareResult sucess");
 
@@ -154,8 +156,7 @@ class BFS {
   };
 }
 
-function Table() {
-  //ordemAleatoria();
+function bfs() {
   renderResult();
 
   const bfs = new BFS(
@@ -339,6 +340,7 @@ class Puzzle {
 
 //ordem alatoria para a primeira tabela
 function ordemAleatoria() {
+  resetCost();
   const squares = [...document.getElementsByClassName("square")].sort(
     (a, b) => parseInt(a.innerText) - parseInt(b.innerText)
   );
@@ -425,7 +427,9 @@ function tester(puzzleAStar) {
 
   let temp = puzzleAStar.proccess();
   if (temp === true) {
-    const valorSucess = document.getElementsByClassName("squareResult");
+    const valorSucess = document.querySelectorAll(
+      "[locationResultaStar] .squareResult"
+    );
     for (let index = 0; index < valorSucess.length; index++)
       valorSucess[index].setAttribute("class", "squareResult sucess");
     return true;
@@ -501,9 +505,18 @@ function renderResultAStar() {
   initialState = [...valorTeste];
 }
 
+// Reset da quantidade de comparações
+function resetCost() {
+  let finalCost = document.getElementById("resultadoCegaLabbel");
+  finalCost.innerHTML = "";
+  finalCost = document.getElementById("resultadoAstarLabbel");
+  finalCost.innerHTML = "";
+}
+
 // Método que inicia os dois ao mesmo tempo
 function play() {
-  Table();
+  resetCost();
+  bfs();
   aStar();
 }
 
