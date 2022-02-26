@@ -77,9 +77,15 @@
 
 #divStyleButtom {
   padding-left: 30%;
-  padding-top: 5%;
+  padding-top: 3%;
 }
 
 .Nomes {
+  font-size: 25px;
+  padding-top: 2%;
+}
+
+.titulo{
   font-size: 30px;
+  padding-left: 30%;
 }
