@@ -7,8 +7,8 @@ const goalStateMatrix = [
 ];
 
 //Método que define um tempo de espera para que a atualização da matriz possa ser vista.
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+function sleep() {
+  return new Promise((resolve) => setTimeout(resolve, 500));
 }
 
 // Classe que realiza a BFS (No caso modelo de força bruta)
@@ -81,7 +81,7 @@ class BFS {
 
   //Metodo responsável por realizar a aleatoriedade plausivel para o jogo
   shuffle = () => {
-    let rand = Math.floor(Math.random() * 30);
+    let rand = Math.floor(Math.random() * 10);
     for (let index = 0; index < rand; index++) {
       let index = this.Queue[0].indexOf(0);
       let moves = this.getPossibleMoves(index);
@@ -132,7 +132,7 @@ class BFS {
     //Renderiza na tela.
     this.mov(visited);
     //Adicionado um await para que possa ser visto a movimentação das peças
-    await sleep(1);
+    await sleep();
 
     //Quando encontrado a posição final ele finaliza as comparações
     if (this.checkGoalState(visited)) {
@@ -459,7 +459,7 @@ async function aStar() {
   do {
     temp = tester(puzzleAStar);
     cont++;
-    await sleep(1);
+    await sleep();
   } while (temp === null);
   console.log("FOUND HEURISTICA = ", cont);
   let finalCost = document.getElementById("resultadoAstarLabbel");
