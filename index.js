@@ -79,6 +79,7 @@ class BFS {
     });
   }
 
+  //Metodo responsável por realizar a aleatoriedade plausivel para o jogo
   shuffle = () => {
     let rand = Math.floor(Math.random() * 30);
     for (let index = 0; index < rand; index++) {
@@ -364,6 +365,7 @@ function ordemAleatoria() {
   }
 }
 
+//Metodo que renderiza o jogo do força bruta
 function renderResult() {
   let valorTeste = [...document.querySelectorAll("[locationResult]")];
   let locationPadrao = [...document.querySelectorAll("[location]")];
@@ -398,6 +400,7 @@ function renderResult() {
   initialState = [...valorTeste];
 }
 
+//Metodo que verifica se aquela organização das peças é valida e caso nao seja inicia em um novo nivel
 function tester(puzzleAStar) {
   let aaa = [];
   let element = [];
@@ -431,7 +434,7 @@ function tester(puzzleAStar) {
     return null;
   }
 }
-
+//Metodo que inicia a busca em amplitude
 async function aStar() {
   renderResultAStar();
 
@@ -462,6 +465,7 @@ async function aStar() {
   finalCost.innerHTML = `Número de comparações = ${cont}`;
 }
 
+// Método responsável por renderizar o A*
 function renderResultAStar() {
   let valorTeste = [...document.querySelectorAll("[LocationResultaStar]")];
   let locationPadrao = [...document.querySelectorAll("[LocationStar]")];
@@ -496,6 +500,7 @@ function renderResultAStar() {
   initialState = [...valorTeste];
 }
 
+// Método que inicia os dois ao mesmo tempo
 function play() {
   Table();
   aStar();
