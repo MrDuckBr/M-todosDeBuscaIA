@@ -149,15 +149,15 @@ function Table() {
 //Cada nó é uma combinação de peças diferentes
 class Node {
   constructor(data, level, fval) {
-    // sets data arr
+    // array com os dados desse nó
     this.data = data;
-    // sets node's level
+    // Nivel que a arvore se encontra
     this.level = level;
-    // sets node's Manhattan Distance
+    // Para o calculo da Distancia de manhattan
     this.fval = fval;
   }
 
-  // generate node children
+  // Gerando o nó filho
   generateChild() {
     let { x, y } = this.find(this.data);
     const val_list = [
@@ -183,7 +183,7 @@ class Node {
     return children;
   }
 
-  // move pieces
+  // Responsável por movimentar as peças
   shuffle(puz, x1, y1, x2, y2) {
     if (x2 >= 0 && x2 < this.data.length && y2 >= 0 && y2 < this.data.length) {
       let temp_puz = [];
@@ -197,7 +197,7 @@ class Node {
     }
   }
 
-  // finds blank in data
+  // Responsável por encontrar o branco no array
   find(puz) {
     for (let i = 0; i < this.data.length; i++) {
       for (let j = 0; j < this.data.length; j++) {
@@ -209,30 +209,33 @@ class Node {
   }
 }
 
+
+// Class do tabuleiro que é utilizada para armazenar o estado final e o 
+//estado inicial
 class Puzzle {
   constructor(size, start, goal) {
-    // sets Puzzle size
+    // Tamanho do Jogo
     this.n = size;
-    // sets start state
+    // Seta o estado inicial
     this.start = new Node(start, 0, 0);
-    // sets goal state
+    // Seta o objetivo do jogo
     this.goal = goal;
-    // open options
+    
     this.open = [];
-    // closed options
+    
     this.closed = [];
-    // control vars
+    
     this.started = false;
     this.finished = false;
     this.solution = undefined;
   }
 
-  // gets heuristc value
+  // Calcula o valor heuristico 
   f(start) {
     return this.h(start.data, this.goal) + start.level;
   }
 
-  // gets Manhattan Distance
+  // Calcula a distancia de manhattan
   h(start, goal) {
     let temp = 0;
     for (let i = 0; i < this.n; i++) {
@@ -244,7 +247,7 @@ class Puzzle {
     }
     return temp;
   }
-
+  //Inicia a class e consequentemente o jogo
   initiate() {
     if (this.started) return;
     this.start.fval = this.f(this.start);
@@ -253,33 +256,33 @@ class Puzzle {
     this.open.push(this.start);
     this.started = true;
   }
-
+  //Define a melhor opção e verifica se finalizou
   proccess() {
     if (this.finished) return true;
     if (this.open.length === 0) return false;
-    // picks best option
+    // Escolhe a melhor opção
     const cur = this.open.shift();
-    // checks if cur is goal
+    
     if (cur.fval === cur.level) {
       this.finished = true;
       this.solution = cur;
       return true;
     }
-    // generate cur childs
+    // Gera os filhos gerados a partir do nivel da arvore
     const temp = cur.generateChild();
     for (const i in temp) {
       const data = temp[i];
       data.fval = this.f(data);
-      // only add to open if not already done
+      // Adiciona apenas se o open não estiver finalizado
       let aux = false;
       this.closed.map((el) => {
         if (this.h(data.data, el.data) === 0) aux = true;
       });
       if (!aux) this.open.push(data);
     }
-    // closes cur
+    // adiciona os fechados
     this.closed.push(cur);
-    // sorts best available options
+    // Embaralha as melhores opções
     this.open.sort((a, b) => {
       if (a.fval > b.fval) return 1;
       if (a.fval < b.fval) return -1;
@@ -288,6 +291,7 @@ class Puzzle {
     return this.open[0].data;
   }
 
+  //Método que troca as peças(swap) do A*
   mov(visited) {
     const locationResult = document.querySelectorAll("[locationResultaStar]");
   
@@ -313,18 +317,12 @@ class Puzzle {
 
 }
 
-//ordem alatoria para a primira tabela
+//ordem alatoria para a primeira tabela
 function ordemAleatoria() {
   const squares = [...document.getElementsByClassName("square")];
   let valorTeste = [...document.querySelectorAll("[location]")];
 
-  // aleatorio corre o risco de nao ter solucao
-
-  // shuffle(squares);
-  // shuffle(valorTeste);
-  // for (let index = 0; index < 8; index++) {
-  //   valorTeste[index].append(squares[index]);
-  // }
+  
   valorTeste[0].append(squares[0]);
   valorTeste[1].append(squares[1]);
   valorTeste[2].append(squares[2]);
