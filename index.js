@@ -79,6 +79,26 @@ class BFS {
     });
   }
 
+  shuffle = () => {
+    let rand = Math.floor(Math.random() * 30);
+    for (let index = 0; index < rand; index++) {
+      let index = this.Queue[0].indexOf(0);
+      let moves = this.getPossibleMoves(index);
+
+      // GET CHILDS
+      let childNodes = moves.map((item) => {
+        let temp = [...this.Queue[0]];
+        return this.swap(temp, index, item.swap);
+      });
+
+      this.Queue.shift();
+      this.Queue.push(
+        childNodes[Math.floor(Math.random() * childNodes.length)]
+      );
+    }
+    return this.Queue[0];
+  };
+
   //Método responsavel por iniciar a BFS( Força Bruta)
   main = async function () {
     let index = this.Queue[0].indexOf(0);
@@ -102,7 +122,7 @@ class BFS {
       }
     });
 
-    //Retira o primeiro elemento da fila 
+    //Retira o primeiro elemento da fila
     let visited = this.Queue.splice(0, 1)[0];
     //Marca como visitado
     this.visitedNodes.push(visited);
@@ -115,9 +135,10 @@ class BFS {
     //Quando encontrado a posição final ele finaliza as comparações
     if (this.checkGoalState(visited)) {
       console.log("FOUND CEGA = ", this.visitedNodes.length - 1);
-      let resultado = document.getElementById("resultadoCegaLabbel")
-    resultado.innerHTML = `Número de Comparações = ${this.visitedNodes.length - 1}`
-      
+      let resultado = document.getElementById("resultadoCegaLabbel");
+      resultado.innerHTML = `Número de Comparações = ${
+        this.visitedNodes.length - 1
+      }`;
 
       const valorSucess = document.getElementsByClassName("squareResult");
       for (let index = 0; index < valorSucess.length; index++)
@@ -130,7 +151,6 @@ class BFS {
     }
   };
 }
-
 
 function Table() {
   //ordemAleatoria();
@@ -209,8 +229,7 @@ class Node {
   }
 }
 
-
-// Class do tabuleiro que é utilizada para armazenar o estado final e o 
+// Class do tabuleiro que é utilizada para armazenar o estado final e o
 //estado inicial
 class Puzzle {
   constructor(size, start, goal) {
@@ -220,17 +239,17 @@ class Puzzle {
     this.start = new Node(start, 0, 0);
     // Seta o objetivo do jogo
     this.goal = goal;
-    
+
     this.open = [];
-    
+
     this.closed = [];
-    
+
     this.started = false;
     this.finished = false;
     this.solution = undefined;
   }
 
-  // Calcula o valor heuristico 
+  // Calcula o valor heuristico
   f(start) {
     return this.h(start.data, this.goal) + start.level;
   }
@@ -262,7 +281,7 @@ class Puzzle {
     if (this.open.length === 0) return false;
     // Escolhe a melhor opção
     const cur = this.open.shift();
-    
+
     if (cur.fval === cur.level) {
       this.finished = true;
       this.solution = cur;
@@ -294,7 +313,7 @@ class Puzzle {
   //Método que troca as peças(swap) do A*
   mov(visited) {
     const locationResult = document.querySelectorAll("[locationResultaStar]");
-  
+
     let vet = [];
     let cont = 0;
     for (let i = 0; i < 3; i++) {
@@ -303,7 +322,7 @@ class Puzzle {
       }
       cont += 2;
     }
-  
+
     locationResult.forEach((item, index) => {
       if (vet[index] == 0) {
         item.querySelector("p").innerText = "";
@@ -314,41 +333,36 @@ class Puzzle {
       }
     });
   }
-
 }
 
 //ordem alatoria para a primeira tabela
 function ordemAleatoria() {
-  const squares = [...document.getElementsByClassName("square")];
+  const squares = [...document.getElementsByClassName("square")].sort(
+    (a, b) => parseInt(a.innerText) - parseInt(b.innerText)
+  );
   let valorTeste = [...document.querySelectorAll("[location]")];
 
-  
-  valorTeste[0].append(squares[0]);
-  valorTeste[1].append(squares[1]);
-  valorTeste[2].append(squares[2]);
+  const bfs = new BFS(
+    [
+      parseInt(squares[0].innerText),
+      parseInt(squares[1].innerText),
+      parseInt(squares[2].innerText),
+      parseInt(squares[7].innerText),
+      0,
+      parseInt(squares[3].innerText),
+      parseInt(squares[6].innerText),
+      parseInt(squares[5].innerText),
+      parseInt(squares[4].innerText),
+    ],
+    []
+  );
+  const inicial = bfs.shuffle();
 
-  valorTeste[5].append(squares[3]);
-  valorTeste[8].append(squares[4]);
-  valorTeste[7].append(squares[5]);
-
-  valorTeste[6].append(squares[6]);
-  valorTeste[3].append(squares[7]);
-
-  function shuffle(array) {
-    let randomNumber;
-    let tmp;
-    for (let i = array.length; i; ) {
-      randomNumber = (Math.random() * i--) | 0;
-      tmp = array[randomNumber];
-      // troca o número aleatório pelo atual
-      array[randomNumber] = array[i];
-      // troca o atual pelo aleatório
-      array[i] = tmp;
-    }
+  for (let index = 0; index < 9; index++) {
+    if (inicial[index] != 0)
+      valorTeste[index].append(squares[inicial[index] - 1]);
   }
 }
-
-
 
 function renderResult() {
   let valorTeste = [...document.querySelectorAll("[locationResult]")];
@@ -418,8 +432,6 @@ function tester(puzzleAStar) {
   }
 }
 
-
-
 async function aStar() {
   renderResultAStar();
 
@@ -446,10 +458,9 @@ async function aStar() {
     await sleep(1);
   } while (temp === null);
   console.log("FOUND HEURISTICA = ", cont);
-  let finalCost = document.getElementById("resultadoAstarLabbel")
-  finalCost.innerHTML = `Número de comparações = ${cont}`
+  let finalCost = document.getElementById("resultadoAstarLabbel");
+  finalCost.innerHTML = `Número de comparações = ${cont}`;
 }
-
 
 function renderResultAStar() {
   let valorTeste = [...document.querySelectorAll("[LocationResultaStar]")];
@@ -485,9 +496,9 @@ function renderResultAStar() {
   initialState = [...valorTeste];
 }
 
-function play(){
-  Table()
-  aStar()
+function play() {
+  Table();
+  aStar();
 }
 
 ordemAleatoria();
