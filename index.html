@@ -248,10 +248,9 @@
           Aleatorio
         </button>
         <button onclick="play();" class="styleButton">Jogar</button>
-        <!-- <button onclick="changePeca(0,1);">change</button> -->
-
+       
         <div class="Nomes">
-          Caio Gottmann Fernandes Morais
+          Caio Gottmann Fernandes Morais - 201910348
             <br>
           Walisson Mendes Ferreira -201720378</div>
       </div>
@@ -259,31 +258,27 @@
   </body>
   <script>
     function dragStart(e) {
-      // Sets the operation allowed for a drag source
       e.dataTransfer.effectAllowed = "move";
-
-      // Sets the value and type of the dragged data
       e.dataTransfer.setData("Text", e.target.getAttribute("id"));
     }
     function dragOver(e) {
-      // Prevent the browser default handling of the data
+     
       e.preventDefault();
       e.stopPropagation();
     }
     function drop(e) {
-      // Cancel this event for everyone else
+     
       e.stopPropagation();
       e.preventDefault();
 
-      // Retrieve the dragged data by type
+      
       var data = e.dataTransfer.getData("Text");
 
-      // Append image to the drop box
+     
       e.target.appendChild(document.getElementById(data));
     }
   </script>
 
   <script src="./index.js"></script>
-  <!-- <script src="./BFS.js"></script>
-  <script src="./Node.js"></script> -->
+ 
 </html>
