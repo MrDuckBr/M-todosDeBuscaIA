@@ -97,6 +97,7 @@ class BFS {
         childNodes[Math.floor(Math.random() * childNodes.length)]
       );
     }
+    
     return this.Queue[0];
   };
 
