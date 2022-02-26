@@ -82,17 +82,18 @@ class BFS {
   //Método responsavel por iniciar a BFS( Força Bruta)
   main = async function () {
     let index = this.Queue[0].indexOf(0);
+    //Seleciona um array com as possibilidade de movimentação
     let moves = this.getPossibleMoves(index);
 
-    // GET CHILDS
+    //Para cada possibilidade de movimentação é feito a troca
     let childNodes = moves.map((item) => {
       let temp = [...this.Queue[0]];
       return this.swap(temp, index, item.swap);
     });
 
+    //verifica se a nova posição já foi visitada ou não foi encontrada
     childNodes.forEach((item) => {
       if (JSON.stringify(this.Queue).indexOf(JSON.stringify(item)) == -1) {
-        // IF NOT FOUND ON QUEUE THEN INSERT IN QUEUE AND NOT IN VISITED
         if (
           JSON.stringify(this.visitedNodes).indexOf(JSON.stringify(item)) == -1
         ) {
@@ -101,12 +102,17 @@ class BFS {
       }
     });
 
+    //Retira o primeiro elemento da fila 
     let visited = this.Queue.splice(0, 1)[0];
+    //Marca como visitado
     this.visitedNodes.push(visited);
 
+    //Renderiza na tela.
     this.mov(visited);
+    //Adicionado um await para que possa ser visto a movimentação das peças
     await sleep(1);
 
+    //Quando encontrado a posição final ele finaliza as comparações
     if (this.checkGoalState(visited)) {
       console.log("FOUND CEGA = ", this.visitedNodes.length - 1);
       let resultado = document.getElementById("resultadoCegaLabbel")
@@ -119,11 +125,28 @@ class BFS {
 
       return;
     } else {
+      //Caso não seja encontrada a posição ele executa o método novamente com a ultima arvore
       this.main();
     }
   };
 }
 
+
+function Table() {
+  //ordemAleatoria();
+  renderResult();
+
+  const bfs = new BFS(
+    initialState.map((oi) => parseInt(oi.innerText == "" ? 0 : oi.innerText)),
+    goalState
+  );
+  bfs.main();
+}
+
+//-------------------------------------------------------------------------------------------------
+// Começo da A*
+
+//Cada nó é uma combinação de peças diferentes
 class Node {
   constructor(data, level, fval) {
     // sets data arr
@@ -327,16 +350,7 @@ function ordemAleatoria() {
   }
 }
 
-function Table() {
-  //ordemAleatoria();
-  renderResult();
 
-  const bfs = new BFS(
-    initialState.map((oi) => parseInt(oi.innerText == "" ? 0 : oi.innerText)),
-    goalState
-  );
-  bfs.main();
-}
 
 function renderResult() {
   let valorTeste = [...document.querySelectorAll("[locationResult]")];
